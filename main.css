@@ -1,0 +1,64 @@
+body {
+    font-size: 22px;
+}
+
+.game {
+    margin: auto;
+    margin-top: 50px;
+    padding: 10px;
+    width: 250px;
+    height: 520px;
+    background-color: #c9c8c8;
+}
+
+.title {
+    margin-top: 10px;
+    display: block;
+    text-align: center;
+}
+
+button {
+    display: block;
+    margin: auto;
+    margin-top: 30px;
+    width: 160px;
+    height: 50px;
+    font-size: 20px;
+}
+
+.gameField {
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    margin-top: 20px;
+    width: 216px;
+    height: 216px;
+    background-color: #fff;
+    border: 1px solid #000000;
+}
+
+.cell {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    border: 1px solid #000000;
+    cursor: pointer;
+}
+
+.score {
+    margin-top: 10px;
+    display: block;
+    text-align: center;
+}
+
+.scoreBlock {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.crossesScore, .noughtsScore {
+    font-size: 22px;
+    color: #4f4fc5;
+    margin-left: 5px; 
+    margin-right: 5px; 
+}
