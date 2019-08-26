@@ -12,6 +12,7 @@
 
 
     let startGame = function(){
+        fieldReset();
         gameField.classList.add('pointer');
         startButton.disabled = true;
         resetButton.disabled = false;
@@ -22,36 +23,96 @@
 
     let gameTern = function(evt){
         let cell = evt.target;
-        if (!cell.textContent){
+        if (cell.textContent === ''){
             cell.textContent = curentPlayer;
             if (curentPlayer === 'X'){
                 cell.classList.add('cross');
             } else {
                 cell.classList.add('nought');
             }
+            winCheck(curentPlayer);
         };
-        winCheck(curentPlayer);
-        curentPlayer = (curentPlayer === 'X') ? '0' : 'X';
-    };
-
-    let winCheck = function(){
 
     };
 
-    let gameReset = function(){
+    let winCheck = function(player){
+        if(
+            cells[0].textContent === player &&
+            cells[1].textContent === player &&
+            cells[2].textContent === player ||
+
+            cells[3].textContent === player &&
+            cells[4].textContent === player &&
+            cells[5].textContent === player ||
+            
+            cells[6].textContent === player &&
+            cells[7].textContent === player &&
+            cells[8].textContent === player ||
+            
+            cells[0].textContent === player &&
+            cells[3].textContent === player &&
+            cells[6].textContent === player ||
+            
+            cells[1].textContent === player &&
+            cells[4].textContent === player &&
+            cells[7].textContent === player ||
+
+            cells[2].textContent === player &&
+            cells[5].textContent === player &&
+            cells[8].textContent === player ||
+            
+            cells[0].textContent === player &&
+            cells[4].textContent === player &&
+            cells[8].textContent === player ||
+            
+            cells[2].textContent === player &&
+            cells[4].textContent === player &&
+            cells[6].textContent === player
+        ){
+            gameWin(player);
+        } else {
+            curentPlayer = (curentPlayer === 'X') ? '0' : 'X';
+            title.textContent = `Ход игрока ${curentPlayer}`;
+        };
+    };
+
+    let gameWin = function(player){
+        title.textContent = `Победил игрок ${player}!`;
+        if (player === 'X'){
+            crossesScore++;
+            crossesScoreSpan.textContent = crossesScore;
+        } else {
+            noughtsScore++;
+            noughtsScoreSpan.textContent = noughtsScore;
+        };
+        gameEnd();
+    };
+
+    let gameEnd = function(){
         gameField.classList.remove('pointer');
         startButton.disabled = false;
-        resetButton.disabled = true;
-        title.textContent = `Игра "Крестики-нолики"`;
         gameField.removeEventListener('click', gameTern);
-        resetButton.removeEventListener('click', gameReset);
+        curentPlayer = 'X';
+    }
+    
+    let fieldReset = function(){
         cells.forEach(function(cell){
             cell.textContent = '';
             cell.classList.remove('cross');
             cell.classList.remove('nought');
         });
+    }
+
+    let gameReset = function(){
+        gameEnd();
+        resetButton.removeEventListener('click', gameReset);
+        resetButton.disabled = true;
+        title.textContent = `Игра "Крестики-нолики"`;
+        fieldReset();
         crossesScore = 0;
         noughtsScore = 0;
+        crossesScoreSpan.textContent = crossesScore;
+        noughtsScoreSpan.textContent = noughtsScore;
     };
 
     startButton.addEventListener('click', startGame);

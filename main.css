@@ -85,3 +85,7 @@ button:disabled{
     margin-left: 5px; 
     margin-right: 5px; 
 }
+
+.noughtsScore {
+    color: #c54f4f;
+}
