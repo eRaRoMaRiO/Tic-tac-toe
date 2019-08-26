@@ -9,6 +9,7 @@
     let noughtsScore = 0;
     let resetButton = document.querySelector('.resetButton');
     let curentPlayer = 'X';
+    let tern = 0;
 
 
     let startGame = function(){
@@ -73,6 +74,10 @@
         } else {
             curentPlayer = (curentPlayer === 'X') ? '0' : 'X';
             title.textContent = `Ход игрока ${curentPlayer}`;
+            tern++;
+            if (tern === 9){
+                draw();
+            }
         };
     };
 
@@ -88,11 +93,17 @@
         gameEnd();
     };
 
+    let draw = function(){
+        title.textContent = `Ничья!`;
+        gameEnd();
+    }
+
     let gameEnd = function(){
         gameField.classList.remove('pointer');
         startButton.disabled = false;
         gameField.removeEventListener('click', gameTern);
         curentPlayer = 'X';
+        tern = 0;
     }
     
     let fieldReset = function(){
