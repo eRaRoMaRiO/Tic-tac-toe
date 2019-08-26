@@ -24,6 +24,11 @@ button {
     width: 160px;
     height: 50px;
     font-size: 20px;
+    cursor: pointer;
+}
+
+button:disabled{
+    cursor: auto;
 }
 
 .gameField {
@@ -42,7 +47,25 @@ button {
     width: 70px;
     height: 70px;
     border: 1px solid #000000;
+    font-size: 45px;
+    text-align: center;
+    line-height: 70px;
+}
+
+.pointer {
     cursor: pointer;
+}
+
+.cross {
+    background-color: #a6d2fc;
+    cursor: auto;
+    user-select: none;
+}
+
+.nought {
+    background-color: #f89b9b;
+    cursor: auto;
+    user-select: none;
 }
 
 .score {
