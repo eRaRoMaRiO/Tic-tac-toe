@@ -14,9 +14,20 @@
     let curentPlayer = 'X';
     let tern = 0;
     let mode = 0;
+    let rounds = 0;
 
     let freeCells = ['0', '1', '2', '3', '4', '5', '6', '7', '8'];
     let gameMatrix = ['', '', '', '', '', '', '', '', ''];
+    let lines = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ]
 
     let randomNumber = function(min, max) {
         return Math.floor(min + Math.random() * (max + 1 - min));
@@ -27,9 +38,20 @@
         gameField.classList.add('pointer');
         startButton.disabled = true;
         resetButton.disabled = false;
-        title.textContent = (mode === 0) ? `Ваш ход` : `Ход игрока ${curentPlayer}`;
-        gameField.addEventListener('click', gameTern);
         resetButton.addEventListener('click', resetGame);
+        if (mode === 0){
+            title.textContent = `Ваш ход`;
+
+            if (rounds % 2 === 0){
+                gameField.addEventListener('click', ternPlayer);
+            } else {
+                title.textContent = `Ход Skynet`; 
+                setTimeout (ternAi, 1000);
+            };
+        } else {
+            gameField.addEventListener('click', ternPlayer);
+            title.textContent = `Ход игрока ${curentPlayer}`;
+        };
     };
 
     let drawCell = function(cell){
@@ -38,80 +60,93 @@
         let value = cell.dataset.value;
         gameMatrix[value] = curentPlayer;
         freeCells.splice(freeCells.indexOf(value), 1);
-    }
+    };
+
+    let checkDraw = function(){
+        tern++;
+        if (tern === 9) {
+            draw();
+            return true;
+        };
+    };
 
     let ternAi = function(){
-        let cell = cells[freeCells[randomNumber(0, freeCells.length - 1)]]
-        console.log(cell);
+        let situation = checkField();
+        console.log(situation);
+        let cell = cells[freeCells[randomNumber(0, freeCells.length - 1)]];
+        if (freeCells.indexOf('4') !== -1){
+            cell = cells[4];
+        } else if (situation !== '--'){
+            cell = situation;
+        };
         drawCell(cell);
-        if (winCheck(curentPlayer)) {
+        situation = checkField();
+        if (situation === 'win') {
             gameWin('Skynet');
         } else {
+            if (checkDraw()){
+                return;
+            };
             curentPlayer = (curentPlayer === 'X') ? '0' : 'X';
-            gameField.addEventListener('click', gameTern);
+            gameField.addEventListener('click', ternPlayer);
             title.textContent = `Ваш ход`;
         };
     };
 
-    let gameTern = function (evt) {
+    let ternPlayer = function (evt) {
         let cell = evt.target;
         if (cell.textContent === '') {
             drawCell(cell);
 
-            if (winCheck(curentPlayer)) {
+            if (checkField() === 'win') {
                 gameWin(mode === 0 ? '' : curentPlayer);
             } else {
-                tern++;
-
-                if (tern === 9) {
-                    draw();
+                if (checkDraw()){
                     return;
                 };
                 curentPlayer = (curentPlayer === 'X') ? '0' : 'X';
                 title.textContent = `Ход игрока ${curentPlayer}`;
                 if (mode === 0){
                     title.textContent = `Ход Skynet`;
-                    gameField.removeEventListener('click', gameTern);
+                    gameField.removeEventListener('click', ternPlayer);
                     setTimeout (ternAi, 1000);
                 };
             };
         };
     };
     
-    let winCheck = function (player) {
-        return (
-            gameMatrix[0] === player &&
-            gameMatrix[1] === player &&
-            gameMatrix[2] === player ||
-
-            gameMatrix[3] === player &&
-            gameMatrix[4] === player &&
-            gameMatrix[5] === player ||
-
-            gameMatrix[6] === player &&
-            gameMatrix[7] === player &&
-            gameMatrix[8] === player ||
-
-            gameMatrix[0] === player &&
-            gameMatrix[3] === player &&
-            gameMatrix[6] === player ||
-
-            gameMatrix[1] === player &&
-            gameMatrix[4] === player &&
-            gameMatrix[7] === player ||
-
-            gameMatrix[2] === player &&
-            gameMatrix[5] === player &&
-            gameMatrix[8] === player ||
-
-            gameMatrix[0] === player &&
-            gameMatrix[4] === player &&
-            gameMatrix[8] === player ||
-
-            gameMatrix[2] === player &&
-            gameMatrix[4] === player &&
-            gameMatrix[6] === player
-        );
+    let checkField = function () {
+        let isWin = false; 
+        let isDanger = false;
+        let freeCell;
+        let freeCellIndex;
+        lines.forEach(function (line) {
+            let crosses = 0;
+            let noughts = 0;
+            let freeCellCount = 0;
+            line.forEach(function(i){
+                if (gameMatrix[i] === 'X'){
+                    crosses++;
+                } else if (gameMatrix[i] === '0'){
+                    noughts++;
+                } else {
+                    freeCellCount++;
+                    freeCellIndex = i;
+                };
+            });
+            if (crosses === 3 || noughts === 3){
+                isWin = true;
+            }
+            if ((crosses === 2 || noughts === 2) && freeCellCount === 1){
+                isDanger = true;
+                freeCell = cells[freeCellIndex];
+            }
+        });
+        if (isWin){
+            return 'win';
+        } else if (isDanger){
+            return freeCell;
+        } else return '--';
     };
 
     let gameWin = function (player) {
@@ -130,9 +165,10 @@
     }
 
     let gameEnd = function () {
+        rounds++;
         gameField.classList.remove('pointer');
         startButton.disabled = false;
-        gameField.removeEventListener('click', gameTern);
+        gameField.removeEventListener('click', ternPlayer);
         curentPlayer = 'X';
         tern = 0;
         gameMatrix = ['', '', '', '', '', '', '', '', ''];
@@ -159,6 +195,7 @@
         title.textContent = `Игра "Крестики-нолики"`;
         crossesScoreSpan.textContent = 0;
         noughtsScoreSpan.textContent = 0;
+        rounds = 0;
     };
 
     let changeMode = function(){

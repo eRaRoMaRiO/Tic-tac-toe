@@ -16,6 +16,10 @@ body {
     text-align: center;
 }
 
+.titleMode {
+    font-size: 20px;
+}
+
 button {
     display: block;
     margin: auto;
