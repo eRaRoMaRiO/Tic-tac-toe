@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,31 +8,35 @@
     <title>Tic-tac-toe</title>
     <link rel="stylesheet" href="main.css">
 </head>
+
 <body>
     <div class="game">
         <span class="title">Игра "Крестики-нолики"</span>
+        <span class="titleMode">Режим "Против ИИ"</span>
         <button class="startGame">Начать игру</button>
         <div class="gameField">
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
+            <div class="cell" data-value="0"></div>
+            <div class="cell" data-value="1"></div>
+            <div class="cell" data-value="2"></div>
+            <div class="cell" data-value="3"></div>
+            <div class="cell" data-value="4"></div>
+            <div class="cell" data-value="5"></div>
+            <div class="cell" data-value="6"></div>
+            <div class="cell" data-value="7"></div>
+            <div class="cell" data-value="8"></div>
         </div>
         <span class="score">Счёт:</span>
         <div class="scoreBlock">
-            <span>Крестики</span>
+            <span class="player1">Игрок</span>
             <span class="crossesScore">0</span>
             <span class="noughtsScore">0</span>
-            <span>Нолики</span>
+            <span class="player2">Skynet</span>
         </div>
         <button class="resetButton" disabled>Сбросить</button>
+        <button class="changeModeButton">Изменить режим</button>
     </div>
-    
+
     <script src="main.js"></script>
 </body>
+
 </html>
